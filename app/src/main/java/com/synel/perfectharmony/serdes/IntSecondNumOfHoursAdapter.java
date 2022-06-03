@@ -4,10 +4,10 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.synel.perfectharmony.utils.Constants;
+import com.synel.perfectharmony.utils.LocalTimeUtils;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -31,9 +31,7 @@ public class IntSecondNumOfHoursAdapter extends TypeAdapter<Integer> {
         if (negative) {
             value *= -1;
         }
-        int hours = Math.toIntExact(TimeUnit.SECONDS.toHours(value));
-        int minutes = Math.toIntExact(TimeUnit.SECONDS.toMinutes(value) - TimeUnit.HOURS.toMinutes(hours));
-        String numOfHours = LocalTime.of(hours, minutes).format(Constants.TIME_FORMATTER);
+        String numOfHours = LocalTimeUtils.convertSecondsToLocalTime(value).format(Constants.TIME_FORMATTER);
         if (negative) {
             numOfHours = "-" + numOfHours;
         }
@@ -56,9 +54,8 @@ public class IntSecondNumOfHoursAdapter extends TypeAdapter<Integer> {
         if (negative) {
             numOfHoursStr = numOfHoursStr.substring(1);
         }
-        LocalTime numOfHours = LocalTime.parse(numOfHoursStr);
-        int numOfSeconds = Math.toIntExact(
-            numOfHours.getSecond() + TimeUnit.HOURS.toSeconds(numOfHours.getHour()) + TimeUnit.MINUTES.toSeconds(numOfHours.getMinute()));
+
+        int numOfSeconds = LocalTimeUtils.convertLocalTimeToSeconds(LocalTime.parse(numOfHoursStr));
         return negative ? -1 * numOfSeconds : numOfSeconds;
     }
 }
