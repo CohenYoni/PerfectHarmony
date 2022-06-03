@@ -58,7 +58,7 @@ public class AttendanceDayData {
 
     @SerializedName("WorkDateA")
     @JsonAdapter(LocalDateStringAdapter.class)
-    private LocalDate workDate;
+    private LocalDate workingDate;
 
     @SerializedName("DayName")
     private String dayOfWeekName;
@@ -72,6 +72,9 @@ public class AttendanceDayData {
 
     @SerializedName("NameAbsenceCodeAW")
     private String absenceCodeName;
+
+    @SerializedName("Exception")
+    private String exceptionCode;  // 1282 - not a working day, 1283 - missing day, 1285 - missing entry
 
     @SerializedName("ExceptType")
     private Integer exceptionType;  // 0 - no exception, 3 - missing day

@@ -2902,23 +2902,86 @@
       }
     ],
     "absencesLookup": [
-      { "AbsCheckType": "0", "Code": "1", "Descript": "חופשה" },
-      { "AbsCheckType": "0", "Code": "2", "Descript": "מחלת עובד" },
-      { "AbsCheckType": "0", "Code": "3", "Descript": "מחלת ילד" },
-      { "AbsCheckType": "0", "Code": "4", "Descript": "מחלת הורה\\בן-בת זוג" },
-      { "AbsCheckType": "0", "Code": "5", "Descript": "מילואים" },
-      { "AbsCheckType": "0", "Code": "6", "Descript": "אבל" },
-      { "AbsCheckType": "0", "Code": "8", "Descript": "שמחה" },
-      { "AbsCheckType": "0", "Code": "9", "Descript": "השתלמות/קורס" },
-      { "AbsCheckType": "0", "Code": "12", "Descript": "בדיקות הריון" },
-      { "AbsCheckType": "0", "Code": "14", "Descript": "טיול" },
-      { "AbsCheckType": "0", "Code": "16", "Descript": "יום בחירה " },
-      { "AbsCheckType": "0", "Code": "17", "Descript": "יום הצהרה" },
-      { "AbsCheckType": "0", "Code": "23", "Descript": "הפסקת קיץ" },
-      { "AbsCheckType": "0", "Code": "24", "Descript": "אי כשירות" },
-      { "AbsCheckType": "0", "Code": "29", "Descript": "בידוד" }
+      {
+        "AbsCheckType": "0",
+        "Code": "1",
+        "Descript": "חופשה"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "2",
+        "Descript": "מחלת עובד"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "3",
+        "Descript": "מחלת ילד"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "4",
+        "Descript": "מחלת הורה\\בן-בת זוג"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "5",
+        "Descript": "מילואים"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "6",
+        "Descript": "אבל"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "8",
+        "Descript": "שמחה"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "9",
+        "Descript": "השתלמות/קורס"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "12",
+        "Descript": "בדיקות הריון"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "14",
+        "Descript": "טיול"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "16",
+        "Descript": "יום בחירה "
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "17",
+        "Descript": "יום הצהרה"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "23",
+        "Descript": "הפסקת קיץ"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "24",
+        "Descript": "אי כשירות"
+      },
+      {
+        "AbsCheckType": "0",
+        "Code": "29",
+        "Descript": "בידוד"
+      }
     ]
   },
-  "absenseForGroupUpdate": { "absencesList": [], "absencesLookup": [] },
+  "absenseForGroupUpdate": {
+    "absencesList": [],
+    "absencesLookup": []
+  },
   "isCheckMadan": false
 }

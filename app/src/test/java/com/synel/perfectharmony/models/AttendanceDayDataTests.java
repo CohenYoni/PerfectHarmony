@@ -18,7 +18,7 @@ public class AttendanceDayDataTests {
         String subBudgetDescription = "Sub Budget";
         String departmentCode = "9012345";
         String departmentDescription = "Department name";
-        LocalDate workDate = LocalDate.of(2022, 5, 20);
+        LocalDate workingDate = LocalDate.of(2022, 5, 20);
         String dayOfWeekName = "Friday";
         String attendanceDayType = "Regular Attendance";
         Integer absenceCode = 0;
@@ -50,7 +50,7 @@ public class AttendanceDayDataTests {
                                                           .subBudgetDescription(subBudgetDescription)
                                                           .departmentCode(departmentCode)
                                                           .departmentDescription(departmentDescription)
-                                                          .workDate(workDate)
+                                                          .workingDate(workingDate)
                                                           .dayOfWeekName(dayOfWeekName)
                                                           .attendanceDayType(attendanceDayType)
                                                           .absenceCode(absenceCode)
@@ -82,7 +82,7 @@ public class AttendanceDayDataTests {
         Assert.assertEquals("Wrong sub budget description!", subBudgetDescription, testedObject.getSubBudgetDescription());
         Assert.assertEquals("Wrong departure code!", departmentCode, testedObject.getDepartmentCode());
         Assert.assertEquals("Wrong departure description!", departmentDescription, testedObject.getDepartmentDescription());
-        Assert.assertEquals("Wrong work date!", workDate, testedObject.getWorkDate());
+        Assert.assertEquals("Wrong working date!", workingDate, testedObject.getWorkingDate());
         Assert.assertEquals("Wrong day of week name!", dayOfWeekName, testedObject.getDayOfWeekName());
         Assert.assertEquals("Wrong attendance day type!", attendanceDayType, testedObject.getAttendanceDayType());
         Assert.assertEquals("Wrong absence code!", absenceCode, testedObject.getAbsenceCode());

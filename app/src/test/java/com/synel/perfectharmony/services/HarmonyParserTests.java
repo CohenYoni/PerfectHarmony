@@ -2,44 +2,13 @@ package com.synel.perfectharmony.services;
 
 import com.synel.perfectharmony.models.AttendanceDayData;
 import com.synel.perfectharmony.models.AttendanceResponsePayload;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HarmonyParserTests {
-
-    private static String attendanceResponsePayloadLastDayWithoutEntries;
-
-    private static String attendanceResponsePayloadLastDayJustEnter;
-
-    private static String attendanceResponsePayloadLastDayAllEntries;
-
-    private static String attendanceResponsePayloadOneDayDoubleShift;
-
-    private static String attendanceResponsePayloadWithSick;
-
-    private static String readFile(String filePath) throws IOException {
-
-        return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
-    }
-
-    @BeforeClass
-    public static void loadTestFiles() throws IOException {
-
-        String baseFolder = "src/test/resources/";
-        attendanceResponsePayloadLastDayWithoutEntries = readFile(baseFolder + "attendance_response_payload_last_day_without_entries.json");
-        attendanceResponsePayloadLastDayJustEnter = readFile(baseFolder + "attendance_response_payload_last_day_just_enter.json");
-        attendanceResponsePayloadLastDayAllEntries = readFile(baseFolder + "attendance_response_payload_all_entries.json");
-        attendanceResponsePayloadOneDayDoubleShift = readFile(baseFolder + "attendance_response_payload_one_day_double_shifts.json");
-        attendanceResponsePayloadWithSick = readFile(baseFolder + "attendance_response_payload_with_sick_days.json");
-    }
 
     @Test
     public void serializeAttendanceResponseEmptyPayloadTest() {
@@ -69,11 +38,12 @@ public class HarmonyParserTests {
                                                                .subBudgetDescription("Sub budget description")
                                                                .departmentCode("Department code")
                                                                .departmentDescription("Department description")
-                                                               .workDate(LocalDate.of(2022, 5, 21))
+                                                               .workingDate(LocalDate.of(2022, 5, 21))
                                                                .dayOfWeekName("Day of week name")
                                                                .attendanceDayType("Attendance day type")
                                                                .absenceCode(0)
                                                                .absenceCodeName("Absence code name")
+                                                               .exceptionCode("1285")
                                                                .exceptionType(1)
                                                                .exceptionDescription("Exception description")
                                                                .shift1ExpectedStartTime(LocalTime.of(8, 0))
@@ -116,6 +86,7 @@ public class HarmonyParserTests {
             "      \"Type\": \"Attendance day type\",\n" +
             "      \"AbsenceCodeAW\": \"0\",\n" +
             "      \"NameAbsenceCodeAW\": \"Absence code name\",\n" +
+            "      \"Exception\": \"1285\",\n" +
             "      \"ExceptType\": 1,\n" +
             "      \"lstExceptDict\": \"Exception description\",\n" +
             "      \"shift1_start\": \"08:00\",\n" +
@@ -192,7 +163,7 @@ public class HarmonyParserTests {
                                                                .subBudgetDescription("Sub budget description")
                                                                .departmentCode("Department code")
                                                                .departmentDescription("Department description")
-                                                               .workDate(LocalDate.of(2022, 5, 21))
+                                                               .workingDate(LocalDate.of(2022, 5, 21))
                                                                .dayOfWeekName("Day of week name")
                                                                .attendanceDayType("Attendance day type")
                                                                .absenceCode(0)
@@ -248,25 +219,44 @@ public class HarmonyParserTests {
         HarmonyParser parser = HarmonyParser.getInstance();
 
         AttendanceResponsePayload lastDayWithoutEntriesPayload = parser.deserializeAttendanceResponsePayloadJson(
-            attendanceResponsePayloadLastDayWithoutEntries);
+            TestConstants.attendanceResponsePayloadLastDayWithoutEntries);
         Assert.assertEquals("Wrong days count in last day without entries!",
                             Integer.valueOf(18),
                             lastDayWithoutEntriesPayload.getTotalCountOfDays());
         AttendanceResponsePayload lastDayJustEnterPayload = parser.deserializeAttendanceResponsePayloadJson(
-            attendanceResponsePayloadLastDayJustEnter);
+            TestConstants.attendanceResponsePayloadLastDayJustEnter);
         Assert.assertEquals("Wrong days count in last day just enter!", Integer.valueOf(18), lastDayJustEnterPayload.getTotalCountOfDays());
         AttendanceResponsePayload lastDayAllEntriesPayload = parser.deserializeAttendanceResponsePayloadJson(
-            attendanceResponsePayloadLastDayAllEntries);
+            TestConstants.attendanceResponsePayloadLastDayAllEntries);
         Assert.assertEquals("Wrong days count in all entries!", Integer.valueOf(18), lastDayAllEntriesPayload.getTotalCountOfDays());
-        AttendanceResponsePayload withSickDaysPayload = parser.deserializeAttendanceResponsePayloadJson(attendanceResponsePayloadWithSick);
+        AttendanceResponsePayload withSickDaysPayload = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayloadWithSick);
         Assert.assertEquals("Wrong days count in sick days!", Integer.valueOf(30), withSickDaysPayload.getTotalCountOfDays());
         AttendanceResponsePayload dayWithDoubleShiftsPayload = parser.deserializeAttendanceResponsePayloadJson(
-            attendanceResponsePayloadOneDayDoubleShift);
+            TestConstants.attendanceResponsePayloadOneDayDoubleShift);
         Assert.assertEquals("Wrong days count in double shifts!", Integer.valueOf(37), dayWithDoubleShiftsPayload.getTotalCountOfDays());
+
+        AttendanceResponsePayload attendanceData202112 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202112);
+        Assert.assertEquals("Wrong days count of 2021-12!", Integer.valueOf(6), attendanceData202112.getTotalCountOfDays());
+        AttendanceResponsePayload attendanceData202201 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202201);
+        Assert.assertEquals("Wrong days count of 2022-01!", Integer.valueOf(37), attendanceData202201.getTotalCountOfDays());
+        AttendanceResponsePayload attendanceData202202 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202202);
+        Assert.assertEquals("Wrong days count of 2022-02!", Integer.valueOf(28), attendanceData202202.getTotalCountOfDays());
+        AttendanceResponsePayload attendanceData202203 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202203);
+        Assert.assertEquals("Wrong days count of 2022-03!", Integer.valueOf(31), attendanceData202203.getTotalCountOfDays());
+        AttendanceResponsePayload attendanceData202204 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202204);
+        Assert.assertEquals("Wrong days count of 2022-04!", Integer.valueOf(30), attendanceData202204.getTotalCountOfDays());
+        AttendanceResponsePayload attendanceData202205 = parser.deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202205Partial);
+        Assert.assertEquals("Wrong days count of 2022-05!", Integer.valueOf(28), attendanceData202205.getTotalCountOfDays());
         String lastDayWithoutEntriesPayloadStr = parser.serializeAttendanceResponsePayloadToJson(lastDayWithoutEntriesPayload);
         String lastDayJustEnterPayloadStr = parser.serializeAttendanceResponsePayloadToJson(lastDayJustEnterPayload);
         String lastDayAllEntriesPayloadStr = parser.serializeAttendanceResponsePayloadToJson(lastDayAllEntriesPayload);
         String withSickDaysPayloadStr = parser.serializeAttendanceResponsePayloadToJson(withSickDaysPayload);
         String dayWithDoubleShiftsPayloadStr = parser.serializeAttendanceResponsePayloadToJson(dayWithDoubleShiftsPayload);
+        String attendanceData202112Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202112);
+        String attendanceData202201Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202201);
+        String attendanceData202202Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202202);
+        String attendanceData202203Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202203);
+        String attendanceData202204Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202204);
+        String attendanceData202205Str = parser.serializeAttendanceResponsePayloadToJson(attendanceData202205);
     }
 }
