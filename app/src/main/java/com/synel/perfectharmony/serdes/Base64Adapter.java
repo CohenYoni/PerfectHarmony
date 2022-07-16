@@ -12,13 +12,23 @@ import java.util.Objects;
  */
 public class Base64Adapter extends TypeAdapter<String> {
 
+    public static String encodeToBase64String(String value) {
+
+        return Objects.nonNull(value) ? Base64.getEncoder().encodeToString(value.getBytes()) : null;
+    }
+
+    public static String decodeBase64ToString(String value) {
+
+        return Objects.nonNull(value) ? new String(Base64.getDecoder().decode(value)) : null;
+    }
+
     /**
      * Serialize a string to base64 string.
      */
     @Override
     public void write(JsonWriter out, String value) throws IOException {
 
-        out.value(Objects.nonNull(value) ? Base64.getEncoder().encodeToString(value.getBytes()) : null);
+        out.value(encodeToBase64String(value));
     }
 
     /**
@@ -27,7 +37,6 @@ public class Base64Adapter extends TypeAdapter<String> {
     @Override
     public String read(JsonReader in) throws IOException {
 
-        String readValue = in.nextString();
-        return Objects.nonNull(readValue) ? new String(Base64.getDecoder().decode(readValue)) : null;
+        return decodeBase64ToString(in.nextString());
     }
 }
