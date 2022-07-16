@@ -16,6 +16,12 @@ public class HarmonyApiClient {
 
     private static Retrofit createClient(String baseUrl, String apiPathPrefix, String initialCookies) {
 
+        if (baseUrl.endsWith(Constants.SLASH)) {
+            baseUrl = baseUrl.replaceAll(String.format("%s+$", Constants.SLASH), "");
+        }
+        if (!apiPathPrefix.startsWith(Constants.SLASH)) {
+            apiPathPrefix = Constants.SLASH + apiPathPrefix;
+        }
         if (!apiPathPrefix.endsWith(Constants.SLASH)) {
             apiPathPrefix += Constants.SLASH;
         }
@@ -47,5 +53,10 @@ public class HarmonyApiClient {
             }
         }
         return retrofitClient;
+    }
+
+    public static Retrofit getClient(String baseUrl, String apiPathPrefix) {
+
+        return getClient(baseUrl, apiPathPrefix, null);
     }
 }
