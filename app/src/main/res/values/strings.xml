@@ -1,3 +1,22 @@
 <resources>
-  <string name="app_name">Perfect Harmony</string>
+  <string name="app_name" translatable="false">Perfect Harmony</string>
+  <string name="company_id_label">Company ID</string>
+  <string name="user_id_label">User ID</string>
+  <string name="password_label">Password</string>
+  <string name="login_label">Login</string>
+  <string name="required_field_error">Required field!</string>
+  <string name="only_digit_error">Only digits allowed!</string>
+  <string name="fetch_company_data_error">Error while getting the company data! Please validate the company ID and the user ID fields.</string>
+  <string name="ok_button">OK</string>
+  <string name="general_login_error">Login failed!</string>
+  <string name="server_exception_prefix">Server exception: </string>
+  <string name="settings">Settings</string>
+  <string name="harmony_base_url_pref_key" translatable="false">harmony_base_url</string>
+  <string name="harmony_base_url_pref_title">Harmony base URL</string>
+  <string name="harmony_base_url_pref_summary">The domain of Harmony server</string>
+  <string name="harmony_base_url_pref_default" translatable="false">https://harmony.synel.co.il</string>
+  <string name="harmony_api_path_pref_key" translatable="false">harmony_api_path</string>
+  <string name="harmony_api_path_pref_title">Harmony API path</string>
+  <string name="harmony_api_path_pref_summary">The api endpoint of Harmony server</string>
+  <string name="harmony_api_path_pref_default" translatable="false">/eharmonynew/api/</string>
 </resources>

@@ -11,4 +11,16 @@ public class Constants {
     public static final String TIME_PATTERN = "HH:mm";
 
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_PATTERN);
+
+    public static final String SESSION_ID_PREF_KEY = "session_id";
+
+    public static final String COMPANY_ID_PREF_KEY = "company_id";
+
+    public static final String EMPLOYEE_ID_PREF_KEY = "employee_id";
+
+    public static final String PASSWORD_PREF_KEY = "password";
+
+    public static final String USER_NO_PREF_KEY = "user_no";
+
+    public static final String SLASH = "/";
 }

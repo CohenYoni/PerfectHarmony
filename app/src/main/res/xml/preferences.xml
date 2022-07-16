@@ -3,14 +3,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <EditTextPreference
-    app:key="harmony_base_url"
+    app:key="@string/harmony_base_url_pref_key"
     app:title="@string/harmony_base_url_pref_title"
     app:summary="@string/harmony_base_url_pref_summary"
     app:defaultValue="@string/harmony_base_url_pref_default"
     />
 
   <EditTextPreference
-    app:key="harmony_api_path"
+    app:key="@string/harmony_api_path_pref_key"
     app:title="@string/harmony_api_path_pref_title"
     app:summary="@string/harmony_api_path_pref_summary"
     app:defaultValue="@string/harmony_api_path_pref_default"

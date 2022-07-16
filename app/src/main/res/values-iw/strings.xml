@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="company_id_label">מזהה חברה</string>
+  <string name="user_id_label">ת.ז</string>
+  <string name="password_label">סיסמה</string>
+  <string name="login_label">התחברות</string>
+  <string name="required_field_error">שדה חובה!</string>
+  <string name="only_digit_error">ספרות בלבד!</string>
+  <string name="fetch_company_data_error">שגיאה בקבלת נתוני החברה מהשרת! נא לוודא שמזהה החברה או ת.ז נכונים.</string>
+  <string name="ok_button">אישור</string>
+  <string name="general_login_error">ההתחברות נכשלה!</string>
+  <string name="server_exception_prefix">שגיאת שרת: </string>
+  <string name="settings">הגדרות</string>
+  <string name="harmony_base_url_pref_title">Harmony דומיין</string>
+  <string name="harmony_base_url_pref_summary">הדומיין של שרת Harmony</string>
+  <string name="harmony_api_path_pref_title">Harmony נתיב API</string>
+  <string name="harmony_api_path_pref_summary">נתיב ה- API של שרת Harmony</string>
+</resources>
