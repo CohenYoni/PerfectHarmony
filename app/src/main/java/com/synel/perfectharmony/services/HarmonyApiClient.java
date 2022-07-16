@@ -1,6 +1,7 @@
 package com.synel.perfectharmony.services;
 
 import com.google.gson.GsonBuilder;
+import com.synel.perfectharmony.utils.Constants;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -15,6 +16,9 @@ public class HarmonyApiClient {
 
     private static Retrofit createClient(String baseUrl, String apiPathPrefix, String initialCookies) {
 
+        if (!apiPathPrefix.endsWith(Constants.SLASH)) {
+            apiPathPrefix += Constants.SLASH;
+        }
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(Level.HEADERS);
 
