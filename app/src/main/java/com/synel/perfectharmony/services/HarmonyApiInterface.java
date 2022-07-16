@@ -15,17 +15,17 @@ import retrofit2.http.Query;
 
 public interface HarmonyApiInterface {
 
-    @POST("/NewLogin/GetCompanyParamsAndPreferencesAndPermissions")
+    @POST("NewLogin/GetCompanyParamsAndPreferencesAndPermissions")
     Call<GetCompanyParamsPreferencesPermissionsResponse> getCompanyParamsPreferencesPermissions(
         @Body CompanyUserLoginRequestPayload companyUserLoginRequestPayload);
 
-    @POST("/login/Login")
+    @POST("login/Login")
     Call<LoginResponsePayload> login(@Body LoginRequestPayload loginRequestPayload);
 
-    @POST("/Common/CheckUserLogin")
+    @POST("Common/CheckUserLogin")
     Call<Boolean> checkUserLogin(@Header("sessionid") String sessionId);
 
-    @GET("/Attendance/GetAttendance?")
+    @GET("Attendance/GetAttendance?")
     Call<AttendanceResponsePayload> getAttendanceData(@Header("sessionid") String sessionId,
                                                       @Query(value = "query", encoded = true) GetAttendanceQueryParam attendanceQueryParam,
                                                       @Query(value = "take", encoded = true) Integer take,
