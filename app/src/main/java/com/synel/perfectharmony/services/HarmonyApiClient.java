@@ -2,6 +2,7 @@ package com.synel.perfectharmony.services;
 
 import com.google.gson.GsonBuilder;
 import com.synel.perfectharmony.utils.Constants;
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
@@ -10,21 +11,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HarmonyApiClient {
 
+    private static final int TIMEOUT_SEC = 60;
+
     private static volatile Retrofit retrofitClient;
 
     private HarmonyApiClient() {}
 
-    private static Retrofit createClient(String baseUrl, String apiPathPrefix, String initialCookies) {
+    private static String cleanBaseUrl(String baseUrl) {
 
         if (baseUrl.endsWith(Constants.SLASH)) {
             baseUrl = baseUrl.replaceAll(String.format("%s+$", Constants.SLASH), "");
         }
+        return baseUrl;
+    }
+
+    private static String cleanApiPathPrefix(String apiPathPrefix) {
+
         if (!apiPathPrefix.startsWith(Constants.SLASH)) {
             apiPathPrefix = Constants.SLASH + apiPathPrefix;
         }
         if (!apiPathPrefix.endsWith(Constants.SLASH)) {
             apiPathPrefix += Constants.SLASH;
         }
+        return apiPathPrefix;
+    }
+
+    private static Retrofit createClient(String baseUrl, String apiPathPrefix, String initialCookies) {
+
+        baseUrl = cleanBaseUrl(baseUrl);
+        apiPathPrefix = cleanApiPathPrefix(apiPathPrefix);
+
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(Level.HEADERS);
 
@@ -34,6 +50,8 @@ public class HarmonyApiClient {
             .addInterceptor(interceptor)
             .addNetworkInterceptor(new HarmonyDefaultHeadersInterceptor(baseUrl))
             .cookieJar(new InMemoryCookieJar())
+            .readTimeout(TIMEOUT_SEC, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT_SEC, TimeUnit.SECONDS)
             .build();
 
         return new Retrofit.Builder()
@@ -58,5 +76,10 @@ public class HarmonyApiClient {
     public static Retrofit getClient(String baseUrl, String apiPathPrefix) {
 
         return getClient(baseUrl, apiPathPrefix, null);
+    }
+
+    public synchronized static void resetClient() {
+
+        retrofitClient = null;
     }
 }
