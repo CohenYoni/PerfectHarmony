@@ -1,13 +1,14 @@
 package com.synel.perfectharmony.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -27,8 +28,6 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseMenuActivity {
 
-    private HarmonyApiInterface harmonyApiInterface;
-
     private TextInputEditText companyIdEditText;
 
     private TextInputEditText userIdEditText;
@@ -37,9 +36,20 @@ public class MainActivity extends BaseMenuActivity {
 
     private Button loginButton;
 
+    SharedPreferences sharedPreferences;
+
     private Editor sharedPreferencesEditor;
 
     private CircularProgressIndicator loginProgressIndicator;
+
+    private HarmonyApiInterface getApiInterface() {
+
+        String baseUrl = sharedPreferences.getString(getString(R.string.harmony_base_url_pref_key),
+                                                     getString(R.string.harmony_base_url_pref_default));
+        String apiPathPrefix = sharedPreferences.getString(getString(R.string.harmony_api_path_pref_key),
+                                                           getString(R.string.harmony_api_path_pref_default));
+        return HarmonyApiClient.getApiInterface(baseUrl, apiPathPrefix);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +57,13 @@ public class MainActivity extends BaseMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         sharedPreferencesEditor = sharedPreferences.edit();
 
-        String baseUrl = sharedPreferences.getString(getString(R.string.harmony_base_url_pref_key),
-                                                     getString(R.string.harmony_base_url_pref_default));
-        String apiPathPrefix = sharedPreferences.getString(getString(R.string.harmony_api_path_pref_key),
-                                                           getString(R.string.harmony_api_path_pref_default));
-        harmonyApiInterface = HarmonyApiClient.getClient(baseUrl, apiPathPrefix)
-                                              .create(HarmonyApiInterface.class);
+        if (sharedPreferences.contains(Constants.SESSION_ID_PREF_KEY)) {
+            goToAttendanceDataActivity();
+            return;
+        }
 
         companyIdEditText = findViewById(R.id.company_id_edit_text);
         userIdEditText = findViewById(R.id.user_id_edit_text);
@@ -157,7 +165,7 @@ public class MainActivity extends BaseMenuActivity {
                                                                                                       .checkComp(true)
                                                                                                       .build();
 
-        Call<GetCompanyParamsPreferencesPermissionsResponse> companyParamsPreferencesPermissions = harmonyApiInterface.getCompanyParamsPreferencesPermissions(
+        Call<GetCompanyParamsPreferencesPermissionsResponse> companyParamsPreferencesPermissions = getApiInterface().getCompanyParamsPreferencesPermissions(
             companyUserLoginRequestPayload);
         toggleLoadingCircleBar(true);
         companyParamsPreferencesPermissions.enqueue(new Callback<GetCompanyParamsPreferencesPermissionsResponse>() {
@@ -208,7 +216,7 @@ public class MainActivity extends BaseMenuActivity {
                                                                      .isFromMobileApp(false)
                                                                      .build();
 
-        Call<LoginResponsePayload> login = harmonyApiInterface.login(loginRequestPayload);
+        Call<LoginResponsePayload> login = getApiInterface().login(loginRequestPayload);
         login.enqueue(new Callback<LoginResponsePayload>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponsePayload> call,
@@ -249,8 +257,7 @@ public class MainActivity extends BaseMenuActivity {
                 sharedPreferencesEditor.putInt(Constants.USER_NO_PREF_KEY, response.body().getChosenProfile().getProfileCode());
                 sharedPreferencesEditor.commit();
                 toggleLoadingCircleBar(false);
-
-                Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_LONG).show(); // TODO: go to next activity
+                goToAttendanceDataActivity();
             }
 
             @Override
@@ -260,5 +267,13 @@ public class MainActivity extends BaseMenuActivity {
                 handleHttpError(t.getMessage());
             }
         });
+    }
+
+    private void goToAttendanceDataActivity() {
+
+        Intent intent = new Intent(MainActivity.this, AttendanceDataActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
     }
 }
