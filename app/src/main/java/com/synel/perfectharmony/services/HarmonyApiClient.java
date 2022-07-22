@@ -2,6 +2,7 @@ package com.synel.perfectharmony.services;
 
 import com.google.gson.GsonBuilder;
 import com.synel.perfectharmony.utils.Constants;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -14,6 +15,10 @@ public class HarmonyApiClient {
     private static final int TIMEOUT_SEC = 60;
 
     private static volatile HarmonyApiInterface apiInterface;
+
+    private static String baseUrl;
+
+    private static String apiPathPrefix;
 
     private HarmonyApiClient() {}
 
@@ -36,10 +41,13 @@ public class HarmonyApiClient {
         return apiPathPrefix;
     }
 
-    private static Retrofit createClient(String baseUrl, String apiPathPrefix, String initialCookies) {
+    public static void setUrl(String baseUrl, String apiPathPrefix) {
 
-        baseUrl = cleanBaseUrl(baseUrl);
-        apiPathPrefix = cleanApiPathPrefix(apiPathPrefix);
+        HarmonyApiClient.baseUrl = cleanBaseUrl(baseUrl);
+        HarmonyApiClient.apiPathPrefix = cleanApiPathPrefix(apiPathPrefix);
+    }
+
+    private static Retrofit createClient(String initialCookies) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(Level.HEADERS);
@@ -61,12 +69,12 @@ public class HarmonyApiClient {
             .build();
     }
 
-    public static HarmonyApiInterface getApiInterface(String baseUrl, String apiPathPrefix, String initialCookies) {
+    public static HarmonyApiInterface getApiInterface(String initialCookies) {
 
         if (apiInterface == null) {
             synchronized (HarmonyApiClient.class) {
                 if (apiInterface == null) {
-                    apiInterface = createClient(baseUrl, apiPathPrefix, initialCookies)
+                    apiInterface = createClient(initialCookies)
                         .create(HarmonyApiInterface.class);
                 }
             }
@@ -74,9 +82,12 @@ public class HarmonyApiClient {
         return apiInterface;
     }
 
-    public static HarmonyApiInterface getApiInterface(String baseUrl, String apiPathPrefix) {
+    public static HarmonyApiInterface getApiInterface() {
 
-        return getApiInterface(baseUrl, apiPathPrefix, null);
+        if (Objects.isNull(baseUrl) || Objects.isNull(apiPathPrefix)) {
+            throw new IllegalArgumentException("You must init the url parameters!");
+        }
+        return getApiInterface(null);
     }
 
     public synchronized static void resetApiInterface() {

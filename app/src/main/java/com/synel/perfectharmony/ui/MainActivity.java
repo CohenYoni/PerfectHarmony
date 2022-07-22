@@ -19,7 +19,6 @@ import com.synel.perfectharmony.models.api.GetCompanyParamsPreferencesPermission
 import com.synel.perfectharmony.models.api.LoginRequestPayload;
 import com.synel.perfectharmony.models.api.LoginResponsePayload;
 import com.synel.perfectharmony.services.HarmonyApiClient;
-import com.synel.perfectharmony.services.HarmonyApiInterface;
 import com.synel.perfectharmony.utils.Constants;
 import java.util.Objects;
 import retrofit2.Call;
@@ -36,19 +35,19 @@ public class MainActivity extends BaseMenuActivity {
 
     private Button loginButton;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     private Editor sharedPreferencesEditor;
 
     private CircularProgressIndicator loginProgressIndicator;
 
-    private HarmonyApiInterface getApiInterface() {
+    private void initApiInterface() {
 
         String baseUrl = sharedPreferences.getString(getString(R.string.harmony_base_url_pref_key),
                                                      getString(R.string.harmony_base_url_pref_default));
         String apiPathPrefix = sharedPreferences.getString(getString(R.string.harmony_api_path_pref_key),
                                                            getString(R.string.harmony_api_path_pref_default));
-        return HarmonyApiClient.getApiInterface(baseUrl, apiPathPrefix);
+        HarmonyApiClient.setUrl(baseUrl, apiPathPrefix);
     }
 
     @Override
@@ -59,6 +58,8 @@ public class MainActivity extends BaseMenuActivity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         sharedPreferencesEditor = sharedPreferences.edit();
+
+        initApiInterface();
 
         if (sharedPreferences.contains(Constants.SESSION_ID_PREF_KEY)) {
             goToAttendanceDataActivity();
@@ -165,8 +166,9 @@ public class MainActivity extends BaseMenuActivity {
                                                                                                       .checkComp(true)
                                                                                                       .build();
 
-        Call<GetCompanyParamsPreferencesPermissionsResponse> companyParamsPreferencesPermissions = getApiInterface().getCompanyParamsPreferencesPermissions(
-            companyUserLoginRequestPayload);
+        Call<GetCompanyParamsPreferencesPermissionsResponse> companyParamsPreferencesPermissions = HarmonyApiClient.getApiInterface()
+                                                                                                                   .getCompanyParamsPreferencesPermissions(
+                                                                                                                       companyUserLoginRequestPayload);
         toggleLoadingCircleBar(true);
         companyParamsPreferencesPermissions.enqueue(new Callback<GetCompanyParamsPreferencesPermissionsResponse>() {
             @Override
@@ -216,7 +218,7 @@ public class MainActivity extends BaseMenuActivity {
                                                                      .isFromMobileApp(false)
                                                                      .build();
 
-        Call<LoginResponsePayload> login = getApiInterface().login(loginRequestPayload);
+        Call<LoginResponsePayload> login = HarmonyApiClient.getApiInterface().login(loginRequestPayload);
         login.enqueue(new Callback<LoginResponsePayload>() {
             @Override
             public void onResponse(@NonNull Call<LoginResponsePayload> call,

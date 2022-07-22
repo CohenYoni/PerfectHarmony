@@ -37,6 +37,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if (key.equals(getString(R.string.harmony_base_url_pref_key)) || key.equals(getString(R.string.harmony_api_path_pref_key))) {
+            String baseUrl = sharedPreferences.getString(getString(R.string.harmony_base_url_pref_key),
+                                                         getString(R.string.harmony_base_url_pref_default));
+            String apiPathPrefix = sharedPreferences.getString(getString(R.string.harmony_api_path_pref_key),
+                                                               getString(R.string.harmony_api_path_pref_default));
+            HarmonyApiClient.setUrl(baseUrl, apiPathPrefix);
             HarmonyApiClient.resetApiInterface();
         }
     }
