@@ -15,4 +15,8 @@
   <string name="harmony_base_url_pref_summary">הדומיין של שרת Harmony</string>
   <string name="harmony_api_path_pref_title">Harmony נתיב API</string>
   <string name="harmony_api_path_pref_summary">נתיב ה- API של שרת Harmony</string>
+  <string name="login_expired">עליך להתחבר מחדש!</string>
+  <string name="please_wait">נא להמתין…</string>
+  <string name="fetch_attendance_data_error">שגיאה בבדיקת התחברות משתמש!</string>
+  <string name="check_user_login_error">שגיאה בקבלת נתוני נוכחות מהשרת!</string>
 </resources>

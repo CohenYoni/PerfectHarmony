@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fillViewport="true">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    tools:context=".ui.AttendanceDataActivity">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/fetch_server_progress_bar_text"
+      app:layout_constraintVertical_chainStyle="packed"
+      app:layout_constraintVertical_bias=".1"
+      android:layout_marginTop="20dp"
+      android:layout_marginBottom="20dp"
+      android:id="@+id/fetch_server_progress_bar"
+      android:indeterminate="true"
+      android:visibility="gone"
+      />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/fetch_server_progress_bar_text"
+      app:layout_constraintTop_toBottomOf="@+id/fetch_server_progress_bar"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/welcome_employee_name_text_view"
+      android:text="@string/please_wait"
+      android:gravity="center"
+      android:textSize="30sp"
+      style="@style/Padding"
+      android:visibility="gone"
+      />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/welcome_employee_name_text_view"
+      app:layout_constraintTop_toBottomOf="@+id/fetch_server_progress_bar_text"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/employee_role"
+      style="@style/Padding"
+      />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/employee_role"
+      app:layout_constraintTop_toBottomOf="@+id/welcome_employee_name_text_view"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      style="@style/Padding"
+      />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

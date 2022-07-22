@@ -19,4 +19,8 @@
   <string name="harmony_api_path_pref_title">Harmony API path</string>
   <string name="harmony_api_path_pref_summary">The api endpoint of Harmony server</string>
   <string name="harmony_api_path_pref_default" translatable="false">/eharmonynew/api/</string>
+  <string name="login_expired">Login Expired!</string>
+  <string name="please_wait">Please wait…</string>
+  <string name="check_user_login_error">Error while checking if the user logged in!</string>
+  <string name="fetch_attendance_data_error">Error while getting the attendance data!</string>
 </resources>
