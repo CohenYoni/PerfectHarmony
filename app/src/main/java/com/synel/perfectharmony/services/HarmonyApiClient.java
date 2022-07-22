@@ -13,7 +13,7 @@ public class HarmonyApiClient {
 
     private static final int TIMEOUT_SEC = 60;
 
-    private static volatile Retrofit retrofitClient;
+    private static volatile HarmonyApiInterface apiInterface;
 
     private HarmonyApiClient() {}
 
@@ -61,25 +61,26 @@ public class HarmonyApiClient {
             .build();
     }
 
-    public static Retrofit getClient(String baseUrl, String apiPathPrefix, String initialCookies) {
+    public static HarmonyApiInterface getApiInterface(String baseUrl, String apiPathPrefix, String initialCookies) {
 
-        if (retrofitClient == null) {
+        if (apiInterface == null) {
             synchronized (HarmonyApiClient.class) {
-                if (retrofitClient == null) {
-                    retrofitClient = createClient(baseUrl, apiPathPrefix, initialCookies);
+                if (apiInterface == null) {
+                    apiInterface = createClient(baseUrl, apiPathPrefix, initialCookies)
+                        .create(HarmonyApiInterface.class);
                 }
             }
         }
-        return retrofitClient;
+        return apiInterface;
     }
 
-    public static Retrofit getClient(String baseUrl, String apiPathPrefix) {
+    public static HarmonyApiInterface getApiInterface(String baseUrl, String apiPathPrefix) {
 
-        return getClient(baseUrl, apiPathPrefix, null);
+        return getApiInterface(baseUrl, apiPathPrefix, null);
     }
 
-    public synchronized static void resetClient() {
+    public synchronized static void resetApiInterface() {
 
-        retrofitClient = null;
+        apiInterface = null;
     }
 }
