@@ -23,4 +23,14 @@ public class Constants {
     public static final String USER_NO_PREF_KEY = "user_no";
 
     public static final String SLASH = "/";
+
+    public static final int ATTENDANCE_DATA_TAKE_PARAM = 100;
+
+    public static final int ATTENDANCE_DATA_SKIP_PARAM = 100;
+
+    public static final int ATTENDANCE_DATA_PAGE_PARAM = 100;
+
+    public static final int ATTENDANCE_DATA_PAGE_SIZE_PARAM = 100;
+
+    public static final int ERROR_INT = -1;
 }

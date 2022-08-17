@@ -8,6 +8,7 @@
   <string name="only_digit_error">Only digits allowed!</string>
   <string name="fetch_company_data_error">Error while getting the company data! Please validate the company ID and the user ID fields.</string>
   <string name="ok_button">OK</string>
+  <string name="cancel_button">Cancel</string>
   <string name="general_login_error">Login failed!</string>
   <string name="server_exception_prefix">Server exception: </string>
   <string name="settings">Settings</string>
@@ -23,4 +24,18 @@
   <string name="please_wait">Please wait…</string>
   <string name="check_user_login_error">Error while checking if the user logged in!</string>
   <string name="fetch_attendance_data_error">Error while getting the attendance data!</string>
+  <string name="change_month_label">Change month</string>
+  <string name="non_month_selected_label">Non month selected</string>
+  <string name="total_expected_working_hours_text">%1$s expected working hours up to today</string>
+  <string name="total_actual_working_hours_text">%1$s actual working hours up to today</string>
+  <string name="expected_working_hours_today_text">%1$s expected working hours for today</string>
+  <string name="extra_hours_word">extra</string>
+  <string name="missing_hours_word">missing</string>
+  <string name="extra_missing_hours_text">%1$s %2$s hours</string>
+  <string name="welcome_employee_name_text">Welcome %1$s</string>
+  <string name="need_to_work_x_hours_text">You need to work %1$s hours today</string>
+  <string name="need_to_exit_at_hour_text">You need to exit at %1$s today</string>
+  <string name="worked_x_hours_text">You worked %1$s hours today</string>
+  <string name="missing_entry_days_label">Missing entry days</string>
+  <string name="non_approved_days_label">Non approved days</string>
 </resources>

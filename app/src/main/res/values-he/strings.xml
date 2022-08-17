@@ -19,4 +19,19 @@
   <string name="please_wait">נא להמתין…</string>
   <string name="fetch_attendance_data_error">שגיאה בבדיקת התחברות משתמש!</string>
   <string name="check_user_login_error">שגיאה בקבלת נתוני נוכחות מהשרת!</string>
+  <string name="cancel_button">ביטול</string>
+  <string name="change_month_label">שינוי חודש</string>
+  <string name="non_month_selected_label">טרם נבחר חודש</string>
+  <string name="total_expected_working_hours_text">%1$s שעות נדרשות עד היום</string>
+  <string name="expected_working_hours_today_text">%1$s שעות תקן ליום זה</string>
+  <string name="total_actual_working_hours_text">%1$s שעות בוצעו בפועל עד היום</string>
+  <string name="extra_missing_hours_text">%1$s של %2$s שעות</string>
+  <string name="missing_hours_word">חוסר</string>
+  <string name="extra_hours_word">עודף</string>
+  <string name="welcome_employee_name_text">שלום %1$s</string>
+  <string name="worked_x_hours_text">עבדת %1$s שעות היום</string>
+  <string name="need_to_work_x_hours_text">עלייך לעבוד %1$s שעות היום</string>
+  <string name="need_to_exit_at_hour_text">עלייך לצאת בשעה %1$s היום</string>
+  <string name="missing_entry_days_label">חוסר דיווח</string>
+  <string name="non_approved_days_label">ימים שטרם אושרו</string>
 </resources>
