@@ -4,6 +4,8 @@ import com.synel.perfectharmony.models.AttendanceResponsePayload;
 import com.synel.perfectharmony.models.api.CompanyUserLoginRequestPayload;
 import com.synel.perfectharmony.models.api.GetAttendanceQueryParam;
 import com.synel.perfectharmony.models.api.GetCompanyParamsPreferencesPermissionsResponse;
+import com.synel.perfectharmony.models.api.GetEmployeeDataRequestParams;
+import com.synel.perfectharmony.models.api.GetEmployeeDataResponsePayload;
 import com.synel.perfectharmony.models.api.LoginRequestPayload;
 import com.synel.perfectharmony.models.api.LoginResponsePayload;
 import retrofit2.Call;
@@ -32,5 +34,10 @@ public interface HarmonyApiInterface {
                                                       @Query(value = "skip", encoded = true) Integer skip,
                                                       @Query(value = "page", encoded = true) Integer page,
                                                       @Query(value = "pageSize", encoded = true) Integer pageSize,
-                                                      @Query(value = "_", encoded = true) Integer unknownParam);
+                                                      @Query(value = "_", encoded = true) Long timestamp);
+
+    @GET("Common/GetEmployeeHeaderData")
+    Call<GetEmployeeDataResponsePayload> getEmployeeData(@Header("sessionid") String sessionId,
+                                                         @Query(value = "query", encoded = true)
+                                                             GetEmployeeDataRequestParams getEmployeeDataRequestParams);
 }
