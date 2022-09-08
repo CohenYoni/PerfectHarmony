@@ -1,7 +1,8 @@
 package com.synel.perfectharmony.services;
 
-import com.synel.perfectharmony.models.AttendanceDayData;
-import com.synel.perfectharmony.models.AttendanceResponsePayload;
+import com.synel.perfectharmony.models.api.AttendanceDayData;
+import com.synel.perfectharmony.models.api.AttendanceResponsePayload;
+import com.synel.perfectharmony.utils.Constants;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -23,13 +24,13 @@ public class HarmonyAttendanceCalculator {
 
     private final LocalDate lastDateOfPayload;
 
-    private LocalTime averageDayWorkingHours;
+    private LocalTime maxDayWorkingHours;
 
     /**
      * @param attendanceResponsePayload raw data of an attendance day
-     * @param averageDayWorkingHours    the desired average working hours per day
+     * @param maxDayWorkingHours        the maximum working hours per day
      */
-    public HarmonyAttendanceCalculator(AttendanceResponsePayload attendanceResponsePayload, LocalTime averageDayWorkingHours) {
+    public HarmonyAttendanceCalculator(AttendanceResponsePayload attendanceResponsePayload, LocalTime maxDayWorkingHours) {
 
         this.attendanceResponsePayload = attendanceResponsePayload;
         if (Objects.isNull(attendanceResponsePayload.getAttendanceDaysData())) {
@@ -38,7 +39,7 @@ public class HarmonyAttendanceCalculator {
             this.lastDateOfPayload = Collections.max(attendanceResponsePayload.getAttendanceDaysData(),
                                                      Comparator.comparing(AttendanceDayData::getWorkingDate)).getWorkingDate();
         }
-        this.averageDayWorkingHours = averageDayWorkingHours;
+        this.maxDayWorkingHours = maxDayWorkingHours;
     }
 
     /**
@@ -50,19 +51,28 @@ public class HarmonyAttendanceCalculator {
     }
 
     /**
-     * @return the desired average working hours per day.
+     * @return the maximum working hours per day.
      */
-    public LocalTime getAverageDayWorkingHours() {
+    public LocalTime getMaxDayWorkingHours() {
 
-        return averageDayWorkingHours;
+        return maxDayWorkingHours;
     }
 
     /**
-     * @param averageDayWorkingHours the new desired average working hours per day.
+     * @param maxDayWorkingHours the new maximum working hours per day.
      */
-    public void setAverageDayWorkingHours(LocalTime averageDayWorkingHours) {
+    public void setMaxDayWorkingHours(LocalTime maxDayWorkingHours) {
 
-        this.averageDayWorkingHours = averageDayWorkingHours;
+        this.maxDayWorkingHours = maxDayWorkingHours;
+    }
+
+    public Optional<AttendanceDayData> getAttendanceDayData(LocalDate requiredDay) {
+
+        return attendanceResponsePayload.getAttendanceDaysData().stream()
+                                        .filter(dayData -> dayData.getWorkingDate()
+                                                                  .atStartOfDay()
+                                                                  .equals(requiredDay.atStartOfDay()))
+                                        .findFirst();
     }
 
     /**
@@ -162,12 +172,7 @@ public class HarmonyAttendanceCalculator {
      */
     public int calculateNumOfExtraMissingHoursInSeconds(LocalDate upToDate) {
 
-        LocalDate finalUpToDate = upToDate;
-        Optional<AttendanceDayData> lastDayData = attendanceResponsePayload.getAttendanceDaysData().stream()
-                                                                           .filter(dayData -> dayData.getWorkingDate()
-                                                                                                     .atStartOfDay()
-                                                                                                     .equals(finalUpToDate.atStartOfDay()))
-                                                                           .findFirst();
+        Optional<AttendanceDayData> lastDayData = getAttendanceDayData(upToDate);
         if (!lastDayData.isPresent()) {
             return 0;
         }
@@ -187,6 +192,15 @@ public class HarmonyAttendanceCalculator {
         return getTotalNumOfActualWorkingHoursInSeconds(lastDateOfPayload) - getTotalNumOfExpectedWorkingHoursInSeconds(lastDateOfPayload);
     }
 
+    public int getExpectedDayWorkingHours(LocalDate workingDate) {
+
+        Optional<AttendanceDayData> requiredDayData = getAttendanceDayData(workingDate);
+        if (!requiredDayData.isPresent() || Objects.isNull(requiredDayData.get().getExpectedTimeSeconds())) {
+            return 0;
+        }
+        return requiredDayData.get().getExpectedTimeSeconds();
+    }
+
     /**
      * Calculate the number of working hours of a working date, by adding the extra / missing hours to the expected hours.
      *
@@ -195,16 +209,26 @@ public class HarmonyAttendanceCalculator {
      */
     public int calculateNumOfWorkingHoursInDayInSeconds(LocalDate workingDate) {
 
-        Optional<AttendanceDayData> requiredDayData = attendanceResponsePayload.getAttendanceDaysData().stream()
-                                                                               .filter(dayData -> dayData.getWorkingDate()
-                                                                                                         .atStartOfDay()
-                                                                                                         .equals(workingDate.atStartOfDay()))
-                                                                               .findFirst();
+        Optional<AttendanceDayData> requiredDayData = getAttendanceDayData(workingDate);
         if (!requiredDayData.isPresent() || requiredDayData.get().getExpectedTimeSeconds() == 0) {
             return 0;
         }
         return requiredDayData.get().getExpectedTimeSeconds() -
             calculateNumOfExtraMissingHoursInSeconds(requiredDayData.get().getWorkingDate().minusDays(1));
+    }
+
+    public int calculateNumOfWorkingHoursInDayOrMaxInSeconds(LocalDate workingDate) {
+
+        return Math.min(calculateNumOfWorkingHoursInDayInSeconds(workingDate), maxDayWorkingHours.toSecondOfDay());
+    }
+
+    private LocalTime calculateExitHourOfDayInSeconds(LocalDate workingDate, int requiredDayWorkingHours) {
+
+        Optional<AttendanceDayData> requiredDayData = getAttendanceDayData(workingDate);
+        if (!requiredDayData.isPresent() || requiredDayWorkingHours == 0 || Objects.isNull(requiredDayData.get().getActualStartTimeAW())) {
+            return null;
+        }
+        return requiredDayData.get().getActualStartTimeAW().plusSeconds(requiredDayWorkingHours);
     }
 
     /**
@@ -215,16 +239,27 @@ public class HarmonyAttendanceCalculator {
      */
     public LocalTime calculateExitHourOfDayInSeconds(LocalDate workingDate) {
 
-        Optional<AttendanceDayData> requiredDayData = attendanceResponsePayload.getAttendanceDaysData().stream()
-                                                                               .filter(dayData -> dayData.getWorkingDate()
-                                                                                                         .atStartOfDay()
-                                                                                                         .equals(workingDate.atStartOfDay()))
-                                                                               .findFirst();
+        return calculateExitHourOfDayInSeconds(workingDate, calculateNumOfWorkingHoursInDayInSeconds(workingDate));
+    }
+
+    public LocalTime calculateExitHourOfDayOrMaxInSeconds(LocalDate workingDate) {
+
         int requiredDayWorkingHours = calculateNumOfWorkingHoursInDayInSeconds(workingDate);
-        if (!requiredDayData.isPresent() || requiredDayWorkingHours == 0 || Objects.isNull(requiredDayData.get().getActualStartTimeAW())) {
-            return null;
+        return requiredDayWorkingHours > maxDayWorkingHours.toSecondOfDay()
+               ? calculateExitHourOfDayInSeconds(workingDate, maxDayWorkingHours.toSecondOfDay())
+               : calculateExitHourOfDayInSeconds(workingDate, requiredDayWorkingHours);
+    }
+
+    public int calculateActualWorkingHoursTodayInSeconds(LocalDate workingDate) {
+
+        Optional<AttendanceDayData> requiredDayData = getAttendanceDayData(workingDate);
+        if (!requiredDayData.isPresent() || Objects.isNull(requiredDayData.get().getActualStartTimeAW()) ||
+            Objects.isNull(requiredDayData.get().getActualEndTimeAW())) {
+            return 0;
         }
-        return requiredDayData.get().getActualStartTimeAW().plusSeconds(requiredDayWorkingHours);
+        return Math.toIntExact(requiredDayData.get()
+                                              .getActualStartTimeAW()
+                                              .until(requiredDayData.get().getActualEndTimeAW(), ChronoUnit.SECONDS));
     }
 
     /**
@@ -250,5 +285,21 @@ public class HarmonyAttendanceCalculator {
     public List<AttendanceDayData> getMissingEntryDays() {
 
         return getMissingEntryDays(lastDateOfPayload);
+    }
+
+    public List<AttendanceDayData> getNonApprovedDays(LocalDate upToDate) {
+
+        return attendanceResponsePayload.getAttendanceDaysData().stream()
+                                        .filter(dayData -> dayData.getWorkingDate().isBefore(upToDate) ||
+                                            dayData.getWorkingDate().isEqual(upToDate))
+                                        .filter(dayData -> !dayData.getExceptionCode().equals(Constants.NON_WORKING_DAY_CODE))
+                                        .filter(datData -> Objects.isNull(datData.getApprovalStatusCodeAW()) ||
+                                            datData.getApprovalStatusCodeAW() != Constants.DAY_HOURS_APPROVED_STATUS_CODE)
+                                        .collect(Collectors.toList());
+    }
+
+    public List<AttendanceDayData> getNonApprovedDays() {
+
+        return getNonApprovedDays(lastDateOfPayload);
     }
 }

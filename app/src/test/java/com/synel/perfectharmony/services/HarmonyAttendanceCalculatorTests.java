@@ -1,7 +1,7 @@
 package com.synel.perfectharmony.services;
 
-import com.synel.perfectharmony.models.AttendanceDayData;
-import com.synel.perfectharmony.models.AttendanceResponsePayload;
+import com.synel.perfectharmony.models.api.AttendanceDayData;
+import com.synel.perfectharmony.models.api.AttendanceResponsePayload;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -14,14 +14,14 @@ import org.junit.Test;
 
 public class HarmonyAttendanceCalculatorTests {
 
-    private final LocalTime averageDayWorkingHours = LocalTime.of(7, 15);
+    private final LocalTime maxDayWorkingHours = LocalTime.of(8, 20);
 
     @Test
     public void test202112Month() {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202112);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 3, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2021, 12, 28)));
         Assert.assertEquals("Wrong working days!", 4, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -74,7 +74,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202201);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 9, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 1, 16)));
         Assert.assertEquals("Wrong working days!", 18, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -131,7 +131,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202202);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 8, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 2, 14)));
         Assert.assertEquals("Wrong working days!", 16, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -182,7 +182,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202203);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 8, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 3, 14)));
         Assert.assertEquals("Wrong working days!", 18, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -233,7 +233,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202204);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 8, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 4, 14)));
         Assert.assertEquals("Wrong working days!", 16, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -282,7 +282,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202205Partial);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 8, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 5, 14)));
         Assert.assertEquals("Wrong working days!", 16, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -333,7 +333,7 @@ public class HarmonyAttendanceCalculatorTests {
 
         AttendanceResponsePayload attendanceData = HarmonyParser.getInstance()
                                                                 .deserializeAttendanceResponsePayloadJson(TestConstants.attendanceResponsePayload202205);
-        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, averageDayWorkingHours);
+        HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(attendanceData, maxDayWorkingHours);
         Assert.assertEquals("Wrong working days!", 8, attendanceCalculator.getTotalNumOfWorkingDays(LocalDate.of(2022, 5, 14)));
         Assert.assertEquals("Wrong working days!", 19, attendanceCalculator.getTotalNumOfWorkingDays());
 
@@ -380,16 +380,16 @@ public class HarmonyAttendanceCalculatorTests {
     }
 
     @Test
-    public void averageDayWorkingHoursTest() {
+    public void maxDayWorkingHoursTest() {
 
         HarmonyAttendanceCalculator attendanceCalculator = new HarmonyAttendanceCalculator(AttendanceResponsePayload.builder().build(),
-                                                                                           averageDayWorkingHours);
-        Assert.assertEquals("Wrong average day working hour initiation!",
-                            averageDayWorkingHours,
-                            attendanceCalculator.getAverageDayWorkingHours());
+                                                                                           maxDayWorkingHours);
+        Assert.assertEquals("Wrong maximum day working hour initiation!",
+                            maxDayWorkingHours,
+                            attendanceCalculator.getMaxDayWorkingHours());
 
-        LocalTime newAverageDayWorkingHours = LocalTime.of(8, 12);
-        attendanceCalculator.setAverageDayWorkingHours(newAverageDayWorkingHours);
-        Assert.assertEquals("Wrong average day working hour!", newAverageDayWorkingHours, attendanceCalculator.getAverageDayWorkingHours());
+        LocalTime newMaxDayWorkingHours = LocalTime.of(8, 12);
+        attendanceCalculator.setMaxDayWorkingHours(newMaxDayWorkingHours);
+        Assert.assertEquals("Wrong maximum day working hour!", newMaxDayWorkingHours, attendanceCalculator.getMaxDayWorkingHours());
     }
 }
