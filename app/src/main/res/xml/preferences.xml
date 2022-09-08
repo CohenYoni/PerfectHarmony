@@ -16,4 +16,11 @@
     app:defaultValue="@string/harmony_api_path_pref_default"
     />
 
+  <EditTextPreference
+    app:key="@string/max_hours_pref_key"
+    app:title="@string/max_hours_pref_title"
+    app:summary="@string/max_hours_pref_summary"
+    app:defaultValue="@string/max_hours_pref_default"
+    />
+
 </androidx.preference.PreferenceScreen>
