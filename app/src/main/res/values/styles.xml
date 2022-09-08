@@ -21,8 +21,4 @@
     <item name="android:textSize">20sp</item>
   </style>
 
-  <style name="Padding">
-    <item name="android:padding">16dp</item>
-  </style>
-
 </resources>

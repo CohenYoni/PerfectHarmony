@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name" translatable="false">Perfect Harmony</string>
+  <string name="app_name">Mesila - Working Hours</string>
   <string name="company_id_label">Company ID</string>
   <string name="user_id_label">User ID</string>
   <string name="password_label">Password</string>
@@ -26,16 +26,26 @@
   <string name="fetch_attendance_data_error">Error while getting the attendance data!</string>
   <string name="change_month_label">Change month</string>
   <string name="non_month_selected_label">Non month selected</string>
-  <string name="total_expected_working_hours_text">%1$s expected working hours up to today</string>
-  <string name="total_actual_working_hours_text">%1$s actual working hours up to today</string>
+  <string name="total_expected_working_hours_text">%1$s total expected working hours</string>
+  <string name="total_actual_working_hours_text">%1$s total actual working hours</string>
   <string name="expected_working_hours_today_text">%1$s expected working hours for today</string>
   <string name="extra_hours_word">extra</string>
   <string name="missing_hours_word">missing</string>
   <string name="extra_missing_hours_text">%1$s %2$s hours</string>
   <string name="welcome_employee_name_text">Welcome %1$s</string>
   <string name="need_to_work_x_hours_text">You need to work %1$s hours today</string>
-  <string name="need_to_exit_at_hour_text">You need to exit at %1$s today</string>
+  <string name="need_to_exit_at_hour_text">You entered at %1$s, and need to exit at %2$s today for working %3$s hours</string>
   <string name="worked_x_hours_text">You worked %1$s hours today</string>
   <string name="missing_entry_days_label">Missing entry days</string>
   <string name="non_approved_days_label">Non approved days</string>
+  <string name="fetch_employee_data_error">Error while getting the employee data!</string>
+  <string name="employee_data_missing">Employee data is missing!</string>
+  <string name="not_working_day">Not a working day</string>
+  <string name="exit_without_enter">You have an exit entry without enter entry!</string>
+  <string name="empty_attendance_data">There is no attendance data for selected month</string>
+  <string name="max_hours_warning_text">The expected working hours are %1$s, but they exceed the allowed number of hours per day (%2$s)</string>
+  <string name="max_hours_pref_key" translatable="false">max_hours_per_day</string>
+  <string name="max_hours_pref_title">Maximum hours</string>
+  <string name="max_hours_pref_summary">Maximum allowed hours per day</string>
+  <string name="max_hours_pref_default" translatable="false">08:25</string>
 </resources>
