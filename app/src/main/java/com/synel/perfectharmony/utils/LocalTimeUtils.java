@@ -2,6 +2,7 @@ package com.synel.perfectharmony.utils;
 
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 
 /**
  * Utilities for LocalTime class.
@@ -31,5 +32,10 @@ public class LocalTimeUtils {
     public static int convertLocalTimeToSeconds(LocalTime time) {
 
         return Math.toIntExact(time.getSecond() + TimeUnit.HOURS.toSeconds(time.getHour()) + TimeUnit.MINUTES.toSeconds(time.getMinute()));
+    }
+
+    public static String secToHHmmStr(int numOfSeconds) {
+
+        return DurationFormatUtils.formatDuration(numOfSeconds * Constants.MILLIS_IN_SEC, Constants.TIME_PATTERN, true);
     }
 }

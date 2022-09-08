@@ -1,7 +1,7 @@
 package com.synel.perfectharmony.services;
 
-import com.synel.perfectharmony.models.AttendanceDayData;
-import com.synel.perfectharmony.models.AttendanceResponsePayload;
+import com.synel.perfectharmony.models.api.AttendanceDayData;
+import com.synel.perfectharmony.models.api.AttendanceResponsePayload;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
@@ -104,7 +104,8 @@ public class HarmonyParserTests {
             "      \"Time_startA_RND\": \"09:19\",\n" +
             "      \"Time_endA_RND\": \"16:29\",\n" +
             "      \"Day_TotalAW\": \"03:31\",\n" +
-            "      \"MissAW\": \"03:33\"\n" +
+            "      \"MissAW\": \"03:33\",\n" +
+            "      \"UpdateStatCodeAW\": null\n" +
             "    }\n" +
             "  ]\n" +
             "}";

@@ -2,7 +2,7 @@ package com.synel.perfectharmony.services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.synel.perfectharmony.models.AttendanceResponsePayload;
+import com.synel.perfectharmony.models.api.AttendanceResponsePayload;
 import java.util.Objects;
 
 /**

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fillViewport="true">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,8 +23,7 @@
       app:helperTextTextAppearance="@style/HelperTextLabel"
       app:layout_constraintVertical_chainStyle="packed"
       app:layout_constraintVertical_bias=".1"
-      style="@style/Padding"
-      >
+      android:padding="16dp">
 
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/company_id_edit_text"
@@ -36,8 +33,7 @@
         android:hint="@string/company_id_label"
         android:textAppearance="@style/HintTextLabel"
         android:drawableStart="@drawable/ic_baseline_company_24"
-        android:background="@drawable/round_button"
-        />
+        android:background="@drawable/round_button" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,8 +47,7 @@
       app:layout_constraintBottom_toTopOf="@+id/password_input_layout"
       app:helperTextTextAppearance="@style/HelperTextLabel"
       app:helperText="@string/user_id_label"
-      style="@style/Padding"
-      >
+      android:padding="16dp">
 
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/user_id_edit_text"
@@ -62,8 +57,7 @@
         android:hint="@string/user_id_label"
         android:textAppearance="@style/HintTextLabel"
         android:drawableStart="@drawable/ic_baseline_person_24"
-        android:background="@drawable/round_button"
-        />
+        android:background="@drawable/round_button" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,8 +72,7 @@
       app:helperTextTextAppearance="@style/HelperTextLabel"
       app:helperText="@string/password_label"
       app:passwordToggleEnabled="true"
-      style="@style/Padding"
-      >
+      android:padding="16dp">
 
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password_edit_text"
@@ -89,8 +82,7 @@
         android:hint="@string/password_label"
         android:textAppearance="@style/HintTextLabel"
         android:drawableStart="@drawable/ic_baseline_password_24"
-        android:background="@drawable/round_button"
-        />
+        android:background="@drawable/round_button" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,8 +97,7 @@
       android:layout_marginBottom="20dp"
       android:id="@+id/login_loading_progress_bar"
       android:indeterminate="true"
-      android:visibility="gone"
-      />
+      android:visibility="gone" />
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/login_button"
@@ -123,8 +114,7 @@
       app:layout_constraintTop_toBottomOf="@id/login_loading_progress_bar"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-      />
+      app:layout_constraintBottom_toBottomOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

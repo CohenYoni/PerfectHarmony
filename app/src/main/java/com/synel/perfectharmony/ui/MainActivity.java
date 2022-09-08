@@ -14,12 +14,20 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.synel.perfectharmony.R;
+import com.synel.perfectharmony.models.AuthData;
+import com.synel.perfectharmony.models.EmployeeData;
+import com.synel.perfectharmony.models.LoginFormData;
 import com.synel.perfectharmony.models.api.CompanyUserLoginRequestPayload;
+import com.synel.perfectharmony.models.api.ExceptionResponse;
 import com.synel.perfectharmony.models.api.GetCompanyParamsPreferencesPermissionsResponse;
+import com.synel.perfectharmony.models.api.GetEmployeeDataRequestParams;
+import com.synel.perfectharmony.models.api.GetEmployeeDataResponsePayload;
 import com.synel.perfectharmony.models.api.LoginRequestPayload;
 import com.synel.perfectharmony.models.api.LoginResponsePayload;
 import com.synel.perfectharmony.services.HarmonyApiClient;
 import com.synel.perfectharmony.utils.Constants;
+import com.synel.perfectharmony.utils.ErrorUtils;
+import com.synel.perfectharmony.utils.SharedPreferencesUtil;
 import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,30 +69,28 @@ public class MainActivity extends BaseMenuActivity {
 
         initApiInterface();
 
-        if (sharedPreferences.contains(Constants.SESSION_ID_PREF_KEY)) {
-            goToAttendanceDataActivity();
-            return;
-        }
-
         companyIdEditText = findViewById(R.id.company_id_edit_text);
         userIdEditText = findViewById(R.id.user_id_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginProgressIndicator = findViewById(R.id.login_loading_progress_bar);
         loginButton = findViewById(R.id.login_button);
 
-        if (sharedPreferences.contains(Constants.COMPANY_ID_PREF_KEY)) {
-            companyIdEditText.setText(String.valueOf(sharedPreferences.getInt(Constants.COMPANY_ID_PREF_KEY, 0)));
-        }
-
-        if (sharedPreferences.contains(Constants.EMPLOYEE_ID_PREF_KEY)) {
-            userIdEditText.setText(String.valueOf(sharedPreferences.getInt(Constants.EMPLOYEE_ID_PREF_KEY, 0)));
-        }
-
-        if (sharedPreferences.contains(Constants.PASSWORD_PREF_KEY)) {
-            passwordEditText.setText(sharedPreferences.getString(Constants.PASSWORD_PREF_KEY, ""));
+        if (sharedPreferences.contains(Constants.LOGIN_FORM_KEY)) {
+            LoginFormData loginFormData = SharedPreferencesUtil.getObject(sharedPreferences,
+                                                                          Constants.LOGIN_FORM_KEY,
+                                                                          null,
+                                                                          LoginFormData.class);
+            companyIdEditText.setText(String.valueOf(loginFormData.getCompanyId()));
+            userIdEditText.setText(String.valueOf(loginFormData.getUserId()));
+            passwordEditText.setText(loginFormData.getPassword());
         }
 
         loginButton.setOnClickListener(view -> getCompanyDataAndLogin());
+
+        if (sharedPreferences.contains(Constants.AUTH_KEY)) {
+            AuthData authData = SharedPreferencesUtil.getObject(sharedPreferences, Constants.AUTH_KEY, null, AuthData.class);
+            fetchEmployeeData(authData);
+        }
     }
 
     private Integer validateCompanyId() {
@@ -160,10 +166,10 @@ public class MainActivity extends BaseMenuActivity {
         }
         CompanyUserLoginRequestPayload companyUserLoginRequestPayload = CompanyUserLoginRequestPayload.builder()
                                                                                                       .companyId(companyId)
-                                                                                                      .isId(true)
+                                                                                                      .isId(Constants.COMPANY_USER_LOGIN_REQUEST_PAYLOAD_IS_ID)
                                                                                                       .employeeIdOrName(userId)
-                                                                                                      .languageId("3")
-                                                                                                      .checkComp(true)
+                                                                                                      .languageId(Constants.COMPANY_USER_LOGIN_REQUEST_PAYLOAD_LANGUAGE_ID)
+                                                                                                      .checkComp(Constants.COMPANY_USER_LOGIN_REQUEST_PAYLOAD_CHECK_COMP)
                                                                                                       .build();
 
         Call<GetCompanyParamsPreferencesPermissionsResponse> companyParamsPreferencesPermissions = HarmonyApiClient.getApiInterface()
@@ -202,20 +208,20 @@ public class MainActivity extends BaseMenuActivity {
         }
         LoginRequestPayload loginRequestPayload = LoginRequestPayload.builder()
                                                                      .employeeIdOrName(userId)
-                                                                     .isId(true)
+                                                                     .isId(Constants.LOGIN_REQUEST_PAYLOAD_IS_ID)
                                                                      .password(password)
-                                                                     .otpCode("")
-                                                                     .otpPhone("")
-                                                                     .languageId("3")
+                                                                     .otpCode(Constants.LOGIN_REQUEST_PAYLOAD_OPT_CODE)
+                                                                     .otpPhone(Constants.LOGIN_REQUEST_PAYLOAD_OPT_PHONE)
+                                                                     .languageId(Constants.LOGIN_REQUEST_PAYLOAD_LANGUAGE_ID)
                                                                      .companyId(companyId)
                                                                      .permissions(companyData.getCompanyPermissions())
                                                                      .companyParams(companyData.getCompanyParams())
                                                                      .companyPreferencesPermissions(companyData.getCompanyPreferencesPermissions())
                                                                      .companyPreferences(companyData.getCompanyPreferences())
-                                                                     .loginByExistedRememberMe(false)
-                                                                     .rememberMe(false)
-                                                                     .logoutHasOccurredByUser(false)
-                                                                     .isFromMobileApp(false)
+                                                                     .loginByExistedRememberMe(Constants.LOGIN_REQUEST_PAYLOAD_LOGIN_BY_EXISTED_REMEMBER_ME)
+                                                                     .rememberMe(Constants.LOGIN_REQUEST_PAYLOAD_REMEMBER_ME)
+                                                                     .logoutHasOccurredByUser(Constants.LOGIN_REQUEST_PAYLOAD_LOGOUT_HAS_OCCURRED_BY_USER)
+                                                                     .isFromMobileApp(Constants.LOGIN_REQUEST_PAYLOAD_IS_FROM_MOBILE_APP)
                                                                      .build();
 
         Call<LoginResponsePayload> login = HarmonyApiClient.getApiInterface().login(loginRequestPayload);
@@ -252,18 +258,92 @@ public class MainActivity extends BaseMenuActivity {
                     return;
                 }
 
-                sharedPreferencesEditor.putString(Constants.SESSION_ID_PREF_KEY, response.body().getSessionId());
-                sharedPreferencesEditor.putInt(Constants.COMPANY_ID_PREF_KEY, companyId);
-                sharedPreferencesEditor.putInt(Constants.EMPLOYEE_ID_PREF_KEY, response.body().getEmployeeId());
-                sharedPreferencesEditor.putString(Constants.PASSWORD_PREF_KEY, password);
-                sharedPreferencesEditor.putInt(Constants.USER_NO_PREF_KEY, response.body().getChosenProfile().getProfileCode());
+                LoginFormData loginFormData = LoginFormData.builder()
+                                                           .companyId(companyId)
+                                                           .userId(response.body().getEmployeeId())
+                                                           .password(password)
+                                                           .build();
+                AuthData authData = AuthData.builder()
+                                            .employeeId(response.body().getEmployeeId())
+                                            .sessionId(response.body().getSessionId())
+                                            .profileCode(response.body().getChosenProfile().getProfileCode())
+                                            .build();
+                SharedPreferencesUtil.putObject(sharedPreferencesEditor, Constants.LOGIN_FORM_KEY, loginFormData);
+                SharedPreferencesUtil.putObject(sharedPreferencesEditor, Constants.AUTH_KEY, authData);
+                sharedPreferencesEditor.commit();
+
+                fetchEmployeeData(AuthData.builder()
+                                          .sessionId(response.body().getSessionId())
+                                          .employeeId(response.body().getEmployeeId())
+                                          .profileCode(response.body().getChosenProfile().getProfileCode())
+                                          .build());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<LoginResponsePayload> call, @NonNull Throwable t) {
+
+                call.cancel();
+                handleHttpError(t.getMessage());
+            }
+        });
+    }
+
+    private void fetchEmployeeData(AuthData authData) {
+
+        if (sharedPreferences.contains(Constants.EMPLOYEE_DATA_KEY)) {
+            goToAttendanceDataActivity();
+            return;
+        }
+        GetEmployeeDataRequestParams employeeDataRequestParams = GetEmployeeDataRequestParams.builder()
+                                                                                             .employeeId(authData.getEmployeeId())
+                                                                                             .permGroup(authData.getProfileCode())
+                                                                                             .build();
+        Call<GetEmployeeDataResponsePayload> employeeDataCall = HarmonyApiClient.getApiInterface()
+                                                                                .getEmployeeData(authData.getSessionId(),
+                                                                                                 employeeDataRequestParams);
+        toggleLoadingCircleBar(true);
+        employeeDataCall.enqueue(new Callback<GetEmployeeDataResponsePayload>() {
+            @Override
+            public void onResponse(@NonNull Call<GetEmployeeDataResponsePayload> call,
+                                   @NonNull Response<GetEmployeeDataResponsePayload> response) {
+
+                if (!response.isSuccessful()) {
+                    if (response.errorBody() == null) {
+                        handleHttpError(getText(R.string.fetch_employee_data_error));
+                        return;
+                    }
+                    if (response.code() == 400) {
+                        try {
+                            ExceptionResponse exceptionResponse = new Gson().fromJson(response.errorBody().string(),
+                                                                                      ExceptionResponse.class);
+                            handleHttpError(getText(R.string.server_exception_prefix) + exceptionResponse.getErrorMessage());
+                        } catch (Exception e) {
+                            handleHttpError(getText(R.string.fetch_employee_data_error));
+                        }
+                        return;
+                    }
+                    String errorMessage = ErrorUtils.parseErrorJsonResponse(response.errorBody(),
+                                                                            getString(R.string.server_exception_prefix),
+                                                                            getString(R.string.fetch_employee_data_error));
+                    handleHttpError(errorMessage);
+                    return;
+                }
+                if (response.body() == null) {
+                    handleHttpError(getText(R.string.fetch_employee_data_error));
+                    return;
+                }
+                EmployeeData employeeData = EmployeeData.builder()
+                                                        .name(response.body().getEmployeeHeaderData().getEmployeeName())
+                                                        .role(response.body().getEmployeeHeaderData().getDepartmentName())
+                                                        .build();
+                SharedPreferencesUtil.putObject(sharedPreferencesEditor, Constants.EMPLOYEE_DATA_KEY, employeeData);
                 sharedPreferencesEditor.commit();
                 toggleLoadingCircleBar(false);
                 goToAttendanceDataActivity();
             }
 
             @Override
-            public void onFailure(@NonNull Call<LoginResponsePayload> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<GetEmployeeDataResponsePayload> call, @NonNull Throwable t) {
 
                 call.cancel();
                 handleHttpError(t.getMessage());
