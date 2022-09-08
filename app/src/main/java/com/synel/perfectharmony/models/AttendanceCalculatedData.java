@@ -16,11 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AttendanceCalculatedData {
 
-    private String employeeName;
-
-    private String employeeRole;
-
-    private String selectedMonth;
+    private boolean isCurrentMonthData;
 
     private String totalExpectedHoursUpToday;
 
@@ -33,6 +29,8 @@ public class AttendanceCalculatedData {
     private String extraMissingHours;
 
     private String actualHoursToday;
+
+    private String maxHoursWarning;
 
     private List<String> missingEntryDays;
 
