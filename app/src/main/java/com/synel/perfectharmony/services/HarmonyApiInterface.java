@@ -1,6 +1,6 @@
 package com.synel.perfectharmony.services;
 
-import com.synel.perfectharmony.models.AttendanceResponsePayload;
+import com.synel.perfectharmony.models.api.AttendanceResponsePayload;
 import com.synel.perfectharmony.models.api.CompanyUserLoginRequestPayload;
 import com.synel.perfectharmony.models.api.GetAttendanceQueryParam;
 import com.synel.perfectharmony.models.api.GetCompanyParamsPreferencesPermissionsResponse;
@@ -8,6 +8,7 @@ import com.synel.perfectharmony.models.api.GetEmployeeDataRequestParams;
 import com.synel.perfectharmony.models.api.GetEmployeeDataResponsePayload;
 import com.synel.perfectharmony.models.api.LoginRequestPayload;
 import com.synel.perfectharmony.models.api.LoginResponsePayload;
+import com.synel.perfectharmony.utils.ToJson;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -27,9 +28,10 @@ public interface HarmonyApiInterface {
     @POST("Common/CheckUserLogin")
     Call<Boolean> checkUserLogin(@Header("sessionid") String sessionId);
 
-    @GET("Attendance/GetAttendance?")
+    @GET("Attendance/GetAttendance")
     Call<AttendanceResponsePayload> getAttendanceData(@Header("sessionid") String sessionId,
-                                                      @Query(value = "query", encoded = true) GetAttendanceQueryParam attendanceQueryParam,
+                                                      @ToJson @Query(value = "query", encoded = true)
+                                                          GetAttendanceQueryParam attendanceQueryParam,
                                                       @Query(value = "take", encoded = true) Integer take,
                                                       @Query(value = "skip", encoded = true) Integer skip,
                                                       @Query(value = "page", encoded = true) Integer page,
@@ -38,6 +40,6 @@ public interface HarmonyApiInterface {
 
     @GET("Common/GetEmployeeHeaderData")
     Call<GetEmployeeDataResponsePayload> getEmployeeData(@Header("sessionid") String sessionId,
-                                                         @Query(value = "query", encoded = true)
+                                                         @ToJson @Query(value = "query", encoded = true)
                                                              GetEmployeeDataRequestParams getEmployeeDataRequestParams);
 }

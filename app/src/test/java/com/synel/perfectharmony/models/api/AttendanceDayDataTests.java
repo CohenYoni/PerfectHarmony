@@ -1,4 +1,4 @@
-package com.synel.perfectharmony.models;
+package com.synel.perfectharmony.models.api;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

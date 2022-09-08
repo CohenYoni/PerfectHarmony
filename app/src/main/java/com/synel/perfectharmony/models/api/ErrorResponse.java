@@ -14,11 +14,11 @@ import lombok.Setter;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetAttendanceErrorResponse {
+public class ErrorResponse {
 
     @SerializedName("Message")
     private String errorMessage;
 
     @SerializedName("MessageDetail")
-    private Integer errorMessageDetails;
+    private String errorMessageDetails;
 }

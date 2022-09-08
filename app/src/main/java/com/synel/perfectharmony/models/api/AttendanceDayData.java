@@ -1,4 +1,4 @@
-package com.synel.perfectharmony.models;
+package com.synel.perfectharmony.models.api;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -147,4 +147,10 @@ public class AttendanceDayData {
     @SerializedName("MissAW")
     @JsonAdapter(IntSecondNumOfHoursAdapter.class)
     private Integer dayMissingTimeSecondsShiftRounded;  // can be negative (missing) or positive (extra)
+
+    /* Approval data */
+
+    @SerializedName("UpdateStatCodeAW")
+    @JsonAdapter(IntStringAdapter.class)
+    private Integer approvalStatusCodeAW;  // 1 - approved
 }

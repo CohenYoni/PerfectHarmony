@@ -1,4 +1,4 @@
-package com.synel.perfectharmony.models;
+package com.synel.perfectharmony.models.api;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
