@@ -1,7 +1,9 @@
 package com.synel.perfectharmony.services;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.synel.perfectharmony.utils.Constants;
+import com.synel.perfectharmony.utils.GsonStringConverterFactory;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
@@ -62,9 +64,12 @@ public class HarmonyApiClient {
             .connectTimeout(TIMEOUT_SEC, TimeUnit.SECONDS)
             .build();
 
+        Gson gson = new GsonBuilder().serializeNulls().create();
+
         return new Retrofit.Builder()
             .baseUrl(baseUrl + apiPathPrefix)
-            .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
+            .addConverterFactory(new GsonStringConverterFactory(gson))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build();
     }
